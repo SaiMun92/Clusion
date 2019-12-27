@@ -54,6 +54,7 @@ public class  TestLocalRH2Lev {
 
 		// Construction of the global multi-map
 		System.out.println("\nBeginning of Encrypted Multi-map creation \n");
+		System.out.println("\nFirst multi-map " + TextExtractPar.lp1);
 		System.out.println("Number of keywords "+TextExtractPar.lp1.keySet().size());
 		System.out.println("Number of pairs "+	TextExtractPar.lp1.keys().size());
 		//start
@@ -72,7 +73,7 @@ public class  TestLocalRH2Lev {
 			System.out.println("Enter the keyword to search for:");
 			String keyword = keyRead.readLine();
 			byte[][] token = RH2Lev.token(sk, keyword);
-			System.out.println(twolev.query(token, twolev.getDictionary(), twolev.getArray()));
+			// System.out.println(twolev.query(token, twolev.getDictionary(), twolev.getArray()));
 			System.out.println(RH2Lev.resolve(CryptoPrimitives.generateCmac(sk, 3 + new String()),
 					twolev.query(token, twolev.getDictionary(), twolev.getArray())));
 

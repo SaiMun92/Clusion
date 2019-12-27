@@ -405,21 +405,29 @@ public class TextExtractPar implements Serializable {
 
 	public static void write(Multimap<String, String> mm, OutputStream out) throws IOException
 	{
+		// https://stackoverflow.com/questions/17702327/writing-and-reading-listmultimapobject-object-in-file
+		// https://www.educative.io/edpresso/what-is-a-multimap-in-java
 		Properties properties = new Properties();
+		Set<String> keyword = mm.keySet();
 
-		for (String key : mm.keySet()) {
+		for (String key : keyword) {
 			StringBuilder values = new StringBuilder();
-			Object value = mm.get(key);    // [word1, word2, word3]
-			values.append(value);
-			properties.setProperty(key, values.substring(1, values.length() - 1));
+			for (String value : mm.get(key)) { // [word1, word2, word3]
+				values.append(value).append(",");
+			}
+			properties.setProperty(key, values.substring(0, values.length() - 1));
 		}
 
 		properties.store(out,"lookup1");
 	}
 
-	public static Multimap<String, String> read(InputStream in) throws IOException
+	public static void read(InputStream in, int num) throws IOException
 	{
-		Multimap<String, String> lookup = ArrayListMultimap.create();
+		if (num == 1) {
+			lp1.clear();
+		} else if (num == 2) {
+			lp2.clear();
+		}
 
 		Properties properties = new Properties();
 		properties.load(in);
@@ -427,10 +435,16 @@ public class TextExtractPar implements Serializable {
 		for (Object keyObj : properties.keySet())
 		{
 			String values = (String) properties.get(keyObj);
-			lookup.put((String) keyObj, values);
+			for (String value : values.split(","))
+			{
+				if (num == 1) {
+					lp1.put((String) keyObj, value);
+				}
+				else {
+					lp2.put((String) keyObj, value);
+				}
+			}
 		}
-
-		return lookup;
 	}
 
 }

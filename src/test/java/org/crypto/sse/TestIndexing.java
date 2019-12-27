@@ -25,42 +25,68 @@ import com.google.common.collect.Multimap;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Scanner;
 
+// C:\Users\smlee\Desktop\temp_files
 public class TestIndexing {
 
-	private static Multimap<String, String> lookup;
+	private static Multimap<String, String> lookup1, lookup2;
 
 	public static void main(String[] args) throws Exception {
-		
+
 		Printer.addPrinter(new Printer(Printer.LEVEL.EXTRA));
 
 		BufferedReader keyRead = new BufferedReader(new InputStreamReader(System.in));
+		Scanner in = new Scanner(System.in);
+		System.out.println("Enter option: \n" +
+				"1: Create the lookup text files.\n" +
+				"2: Import the textfiles into lookup tables.");
+		int option = in.nextInt();
 
-/*		System.out.println("Enter the relative path name of the folder that contains the files to make searchable:");
+		while(option != 4) {
+			switch (option) {
+				case 1:
+					System.out.println("Enter the relative path name of the folder that contains the files to make searchable:");
+					String pathName = keyRead.readLine();
 
-		String pathName = keyRead.readLine();
+					ArrayList<File> listOfFile = new ArrayList<File>();
+					TextProc.listf(pathName, listOfFile);
 
-		ArrayList<File> listOfFile = new ArrayList<File>();
-		TextProc.listf(pathName, listOfFile);
+					// Beginning of text extraction, inside this function calls the TextExtractPar
+					TextProc.TextProc(false, pathName);
 
-		// Beginning of text extraction, inside this function calls the TextExtractPar
-		TextProc.TextProc(false, pathName);
+					OutputStream os1 = new FileOutputStream("lookup1_old.txt");
+					TextExtractPar.write(TextExtractPar.lp1, os1);
 
-		OutputStream os1 = new FileOutputStream("lookup1.txt");
-		TextExtractPar.write(TextExtractPar.lp1, os1);
+					OutputStream os2 = new FileOutputStream("lookup2.txt");
+					TextExtractPar.write(TextExtractPar.lp2, os2);
 
-		OutputStream os2 = new FileOutputStream("lookup2.txt");
-		TextExtractPar.write(TextExtractPar.lp2, os2);
-		*/
+					System.out.println("\nFirst multi-map " + TextExtractPar.lp1);
+					System.out.println("Second multi-map " + TextExtractPar.lp2);
+					System.out.println("Text files have been created.");
+					break;
 
-		InputStream is = new FileInputStream("file.txt");
-		lookup = TextExtractPar.read(is);
-		TextExtractPar extractPar = new TextExtractPar(lookup, lookup);
-		System.out.println("First multi-map " + extractPar.getL1());
+				case 2:
+					InputStream is1 = new FileInputStream("lookup1_old.txt");
+					InputStream is2 = new FileInputStream("lookup2.txt");
 
+					TextExtractPar.read(is1, 1);
+					TextExtractPar.read(is2, 2);
 
-//		System.out.println("\nFirst multi-map " + TextExtractPar.lp1);
-//		System.out.println("Second multi-map " + TextExtractPar.lp2);
+					System.out.println("\nFirst multi-map " + TextExtractPar.lp1);
+					System.out.println("Second multi-map " + TextExtractPar.lp2);
+					break;
+
+				default:
+					System.out.println("Exiting the system");
+					break;
+			}
+
+			System.out.println("Enter option: \n" +
+					"1: Create the lookup text files.\n" +
+					"2: Import the textfiles into lookup tables.");
+			option = in.nextInt();
+		}
 
 	}
 
